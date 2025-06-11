@@ -7,9 +7,9 @@ import { useCreatePost, useUpdatePost } from "@/lib/hooks"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Save, X } from "lucide-react"
+import { RichTextEditor } from "./rich-text-editor"
 import type { Post } from "@/lib/api"
 
 interface PostFormProps {
@@ -111,16 +111,15 @@ export function PostForm({ post, onCancel, onSaved }: PostFormProps) {
 
           <div className="space-y-2">
             <Label htmlFor="body">Content</Label>
-            <Textarea
-              id="body"
-              value={body}
-              onChange={(e) => setBody(e.target.value)}
+            <RichTextEditor
+              content={body}
+              onChange={setBody}
               placeholder="Write your post content here..."
-              rows={10}
-              className="resize-none"
-              required
+              className="min-h-[300px] outline-0"
             />
-            <p className="text-sm text-muted-foreground">{body.length} characters</p>
+            <p className="text-sm text-muted-foreground">
+              {body.length > 0 ? `${body.length} characters` : "Start writing..."}
+            </p>
           </div>
 
           <div className="flex gap-4">

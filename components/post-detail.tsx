@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Skeleton } from "@/components/ui/skeleton"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { AlertCircle, Calendar, User } from "lucide-react"
+import parse from "html-react-parser"
 
 interface PostDetailProps {
   postId: string
@@ -48,6 +49,9 @@ export function PostDetail({ postId }: PostDetailProps) {
     )
   }
 
+  // Check if the content is HTML
+  const isHtml = /<\/?[a-z][\s\S]*>/i.test(post.body)
+
   return (
     <Card className="max-w-4xl mx-auto">
       <CardHeader>
@@ -64,8 +68,8 @@ export function PostDetail({ postId }: PostDetailProps) {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="prose prose-slate max-w-none">
-          <p className="text-lg leading-relaxed whitespace-pre-wrap">{post.body}</p>
+        <div className="prose prose-slate dark:prose-invert max-w-none">
+          {isHtml ? parse(post.body) : <p className="text-lg leading-relaxed whitespace-pre-wrap">{post.body}</p>}
         </div>
       </CardContent>
     </Card>
