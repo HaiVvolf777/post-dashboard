@@ -8,13 +8,6 @@ import { Alert, AlertDescription } from "@/components/ui/alert"
 import { AlertCircle, Eye } from "lucide-react"
 import Link from "next/link"
 
-// Function to strip HTML tags and get plain text
-function stripHtml(html: string): string {
-  const tmp = document.createElement("DIV")
-  tmp.innerHTML = html
-  return tmp.textContent || tmp.innerText || ""
-}
-
 export function PostsList() {
   const { data: posts, isLoading, error } = usePosts()
 
@@ -56,29 +49,23 @@ export function PostsList() {
 
   return (
     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-      {posts.map((post) => {
-        // Check if the content is HTML
-        const isHtml = /<\/?[a-z][\s\S]*>/i.test(post.body)
-        const bodyText = isHtml ? stripHtml(post.body) : post.body
-
-        return (
-          <Card key={post.id} className="hover:shadow-lg transition-shadow">
-            <CardHeader>
-              <CardTitle className="line-clamp-2">{post.title}</CardTitle>
-              <CardDescription>Post #{post.id}</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-slate-600 line-clamp-3 mb-4">{bodyText}</p>
-              <Button asChild size="sm">
-                <Link href={`/posts/${post.id}`}>
-                  <Eye className="w-4 h-4 mr-2" />
-                  Read More
-                </Link>
-              </Button>
-            </CardContent>
-          </Card>
-        )
-      })}
+      {posts.map((post) => (
+        <Card key={post.id} className="hover:shadow-lg transition-shadow">
+          <CardHeader>
+            <CardTitle className="line-clamp-2">{post.title}</CardTitle>
+            <CardDescription>Post #{post.id}</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <p className="text-slate-600 line-clamp-3 mb-4">{post.body}</p>
+            <Button asChild size="sm">
+              <Link href={`/posts/${post.id}`}>
+                <Eye className="w-4 h-4 mr-2" />
+                Read More
+              </Link>
+            </Button>
+          </CardContent>
+        </Card>
+      ))}
     </div>
   )
 }
